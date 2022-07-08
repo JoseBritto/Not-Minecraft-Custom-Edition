@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
@@ -16,17 +17,14 @@ public class ChunkRenderer : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyUp(KeyCode.G))
             Gen();
     }
     void Gen()
-    {
-
-        var data = ChunkDataManager.GenerateChunk(new Vector2Int((int)transform.position.x, (int)transform.position.z), noise);
-
-        StartCoroutine(Render(data.Result));
+    {        
+        StartCoroutine(Render());
     }
-    public IEnumerator Render(ChunkBlockData data)
+    public IEnumerator Render()
     {
         /* for(int x =0; x < ChunkBlockData.SIZE; x ++)
          {
@@ -47,12 +45,25 @@ public class ChunkRenderer : MonoBehaviour
 
              yield return null;
          }*/
-        var task = ChunkMeshBuilder.Build(data);
-        while (task.IsCompleted == false)
-            yield return null;
 
+        var dataTask = ChunkDataManager.GenerateChunk(new Vector2Int((int)transform.position.x, (int)transform.position.z), noise);
+        
+        while (dataTask.IsCompleted == false)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        //task1.Wait();
+        
+        var data = dataTask.Result;
+
+        var task = ChunkMeshBuilder.Build(data);
 
         var r = GetComponent<MeshFilter>();
+
+        while (task.IsCompleted == false)
+            yield return new WaitForFixedUpdate();
+
+
         r.mesh = task.Result;
 
         yield break;

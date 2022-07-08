@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ChunkDataManager
 {
-    public static Task<ChunkBlockData> GenerateChunk(Vector2Int chunkPosition, PerlinNoise3D noise3d)
+    public static async Task<ChunkBlockData> GenerateChunk(Vector2Int chunkPosition, PerlinNoise3D noise3d)
     {
         var data = new ChunkBlockData(chunkPosition);
 
@@ -13,17 +13,26 @@ public class ChunkDataManager
         {
             for (int z =0; z < ChunkBlockData.SIZE; z++)
             {
-                var noise = (int)(noise3d.GetNoise2D(x + chunkPosition.x, z + chunkPosition.y) * (ChunkBlockData.HEIGHT - 1));
-                for (int y = noise; y >= 0; y--)
-                {
-                    data.SetBlock(x, y, z, BlockType.Dirt);
+                //var noise = (int)(noise3d.GetNoise2D(x + chunkPosition.x, z + chunkPosition.y) * (ChunkBlockData.HEIGHT - 1));
 
-                }
+              await Task.Run(() =>
+              {
+                    var noise = WorldManager.Instance.BaseSurfaceLevel + (int)RngSource.Instance.GetSurfaceNoise2D(x + chunkPosition.x, z + chunkPosition.y);
+
+                    noise = Mathf.Clamp(noise, 0, ChunkBlockData.HEIGHT - 1);
+
+                    for (int y = noise; y >= 0; y--)
+                    {
+                        data.SetBlock(x, y, z, BlockType.Dirt);
+
+                    }
+              });              
 
             }
         }
 
-        return Task.FromResult(data);  
+
+        return data;  
     }
 
 
@@ -37,7 +46,7 @@ public class ChunkDataManager
 public class ChunkBlockData
 {
     public const int SIZE = 16;
-    public const int HEIGHT = 32;
+    public const int HEIGHT = 256;
 
     private readonly BlockType[] blocks;
 

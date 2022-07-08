@@ -6,7 +6,17 @@ public class WorldManager : MonoBehaviour
 {
     public Vector2 WorldSize = new Vector2(5, 5);
 
+    public int BaseSurfaceLevel = 10;
+
     public GameObject ChunkPrefab;
+
+    public static WorldManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+        Debug.Log("Init");
+    }
 
     private void Start()
     {

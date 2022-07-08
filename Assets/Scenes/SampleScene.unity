@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 1064647437}
   - component: {fileID: 1064647436}
   - component: {fileID: 1064647438}
+  - component: {fileID: 1064647439}
   m_Layer: 0
   m_Name: Worldd
   m_TagString: Untagged
@@ -332,6 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorldSize: {x: 32, y: 32}
+  BaseSurfaceLevel: 10
   ChunkPrefab: {fileID: 6083580501437444950, guid: 627fbcfa8b729554693391ef34475f30, type: 3}
 --- !u!4 &1064647437
 Transform:
@@ -367,3 +369,23 @@ MonoBehaviour:
   Frequency: 0.005
   noiseType: 0
   fractalType: 1
+--- !u!114 &1064647439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064647435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64140ef164da06548b031a73f876b4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 452
+  noiseSourceType: 0
+  fractalType: 1
+  frequency: 0.005
+  lacunarity: 2.9
+  octaves: 3
+  fractalGain: 0.5
+  Amplitude: 10
