@@ -6,6 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshCollider))]
 public class ChunkRenderer : MonoBehaviour
 {
     private PerlinNoise3D noise;
@@ -65,6 +66,8 @@ public class ChunkRenderer : MonoBehaviour
 
 
         r.mesh = task.Result;
+
+        GetComponent<MeshCollider>().sharedMesh = task.Result;
 
         yield break;
 

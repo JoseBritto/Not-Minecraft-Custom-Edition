@@ -57,6 +57,7 @@ public class ChunkMeshBuilder
         }
 
         var mesh = new Mesh();
+
         mesh.SetVertices(verts);
         mesh.SetTriangles(tris, 0);
         mesh.RecalculateBounds();
@@ -64,6 +65,7 @@ public class ChunkMeshBuilder
         mesh.RecalculateTangents();
 
         mesh.SetUVs(0, uvs);
+        //mesh.Optimize();
 
         return Task.FromResult(mesh);
 
